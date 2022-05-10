@@ -1,0 +1,25 @@
+{
+  "name": "notes-telegram-bot",
+  "version": "1.0.0",
+  "description": "📱 Reçoit tes nouvelles notes d'EcoleDirecte par message Telegram",
+  "main": "index.js",
+  "author": "CloneDirecte Team <contact@clonedirecte.cf>",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "start": "node .",
+    "dev": "nodemon ."
+  },
+  "keywords": [
+    "clonedirecte",
+    "ecoledirecte",
+    "nodejs",
+    "telegram",
+    "bot"
+  ],
+  "dependencies": {
+    "dotenv": "^16.0.0",
+    "ed-notes": "^1.0.0",
+    "telegraf": "^4.8.1"
+  }
+}

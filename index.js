@@ -7,6 +7,17 @@ dotenv.config();
 var username = process.env.ED_USERNAME;
 var password = process.env.ED_PASSWORD;
 
+var timeZone = process.env.TIME_ZONE;
+
+function logMsg(message) {
+  console.log(
+    `[${new Date().toLocaleString("en-US", {
+      hour12: false,
+      timeZone: `${timeZone ? timeZone : "UTC"}`,
+    })}] ${message}`
+  );
+}
+
 if (!process.env.TOKEN) throw new Error("No TOKEN in .env");
 const bot = new Telegraf(process.env.TOKEN);
 
@@ -27,7 +38,7 @@ bot.start(async (ctx) => {
     ctx.reply(
       "Bonjour, nous avons lancé le check chaque heure pour de nouvelles notes."
     );
-    console.log("Check chaque heure commencé! ");
+    logMsg("Check chaque heure commencé! ");
     async function edNotesCall() {
       try {
         var edNotesReturn = JSON.parse(fs.readFileSync("./edNotesReturn.json"));
@@ -39,21 +50,20 @@ bot.start(async (ctx) => {
           ({ devoir }) => !sortEdNotesReturn.has(devoir)
         );
         if (removeDupes.length === 0) {
-          console.log("Pas de nouvelles notes.");
+          logMsg("Pas de nouvelles notes.");
         } else {
           removeDupes.map((item) => {
             var message = `Nouvelle note en ${item.libelleMatiere}: ${item.valeur}/${item.noteSur},\nCoefficient: ${item.coef},\nDevoir: "${item.devoir}"`;
             ctx.reply(message);
-            console.log(message);
+            logMsg(message);
           });
         }
         fs.writeFileSync("./edNotesReturn.json", JSON.stringify(write));
       } catch (err) {
-        console.log(err);
         if (err) {
           var firstInit = await edNotes(username, password);
           fs.writeFileSync("./edNotesReturn.json", JSON.stringify(firstInit));
-          console.log("Created ./edNotesReturn.json");
+          logMsg("Created ./edNotesReturn.json");
         }
       }
     }
@@ -66,4 +76,4 @@ bot.start(async (ctx) => {
   }
 });
 
-bot.launch().then(console.log("Bot lancé!"));
+bot.launch().then(logMsg("Bot lancé!"));

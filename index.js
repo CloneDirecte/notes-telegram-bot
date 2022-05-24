@@ -31,26 +31,25 @@ bot.start(async (ctx) => {
     async function edNotesCall() {
       try {
         var edNotesReturn = JSON.parse(fs.readFileSync("./edNotesReturn.json"));
-        edNotesReturn.data.notes.sort((a, b) => {
-          return a.dateSaisie.localeCompare(b.dateSaisie);
-        });
         var write = await edNotes(username, password);
-        write.data.notes.sort((a, b) => {
-          return a.dateSaisie.localeCompare(b.dateSaisie);
-        });
-        if (write.data.notes.length > edNotesReturn.data.notes.length) {
-          var i = edNotesReturn.data.notes.length;
-          while (i < write.data.notes.length) {
-            var message = `Nouvelle note en ${write.data.notes[i].libelleMatiere}: ${write.data.notes[i].valeur}/${write.data.notes[i].noteSur}, coef ${write.data.notes[i].coef}, pour le devoir "${write.data.notes[i].devoir}"`;
+        const sortEdNotesReturn = new Set(
+          edNotesReturn.data.notes.map(({ devoir }) => devoir)
+        );
+        const removeDupes = write.data.notes.filter(
+          ({ devoir }) => !sortEdNotesReturn.has(devoir)
+        );
+        if (removeDupes.length === 0) {
+          console.log("Pas de nouvelles notes.");
+        } else {
+          removeDupes.map((item) => {
+            var message = `Nouvelle note en ${item.libelleMatiere}: ${item.valeur}/${item.noteSur},\nCoefficient: ${item.coef},\nDevoir: "${item.devoir}"`;
             ctx.reply(message);
             console.log(message);
-            i++;
-          }
-        } else {
-          console.log("Pas de nouvelles notes.");
+          });
         }
         fs.writeFileSync("./edNotesReturn.json", JSON.stringify(write));
       } catch (err) {
+        console.log(err);
         if (err) {
           var firstInit = await edNotes(username, password);
           fs.writeFileSync("./edNotesReturn.json", JSON.stringify(firstInit));

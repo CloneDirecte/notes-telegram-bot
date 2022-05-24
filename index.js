@@ -28,15 +28,15 @@ bot.start(async (ctx) => {
   const chatId = ctx.chat.id;
   if (!process.env.ID) {
     ctx.reply(
-      `Il n'y a aucun ID dans le .env. \nSi vous êtes le propriétaire du bot, vous pouvez le changer au votre. \nSi vous avez recemment mis l'ID dans le .env, essayez de redémarrer le bot. \nVoici votre ID utilisateur: ${chatId}. \nPour relancer, envoyez /start.`
+      `🚫 Il n'y a aucun ID dans le .env. \nSi vous êtes le propriétaire du bot, vous pouvez le changer au votre. \nSi vous avez recemment mis l'ID dans le .env, essayez de redémarrer le bot. \nVoici votre ID utilisateur: ${chatId}. \nPour relancer, envoyez /start.`
     );
   } else if (Number(process.env.ID) === NaN) {
     ctx.reply(
-      `L'ID dans le .env n'est pas un nombre. \nRappel: \n- votre user ID est ${chatId}.`
+      `🚫 L'ID dans le .env n'est pas un nombre. \nRappel: \n- votre user ID est ${chatId}.`
     );
   } else if (Number(process.env.ID) === chatId) {
     ctx.reply(
-      "Bonjour, nous avons lancé le check chaque heure pour de nouvelles notes."
+      "👋 Bonjour, nous avons lancé le check chaque heure pour de nouvelles notes."
     );
     logMsg("Check chaque heure commencé! ");
     async function edNotesCall() {
@@ -53,7 +53,7 @@ bot.start(async (ctx) => {
           logMsg("Pas de nouvelles notes.");
         } else {
           removeDupes.map((item) => {
-            var message = `Nouvelle note en ${item.libelleMatiere}: ${item.valeur}/${item.noteSur},\nCoefficient: ${item.coef},\nDevoir: "${item.devoir}"`;
+            var message = `📝 Nouvelle note en ${item.libelleMatiere}: ${item.valeur}/${item.noteSur},\nCoefficient: ${item.coef},\nDevoir: "${item.devoir}"`;
             ctx.reply(message);
             logMsg(message);
           });
@@ -71,7 +71,7 @@ bot.start(async (ctx) => {
     setInterval(await edNotesCall, 1000 * 60 * 60);
   } else {
     ctx.reply(
-      `Une erreur est survenue. \nSolutions: \n- Vous avez probablement entré le mauvais user ID ou \n- vous n'êtes pas le propriétaire du bot. \nRappel: votre user ID est ${chatId}.`
+      `🚫 Une erreur est survenue. \nSolutions: \n- Vous avez probablement entré le mauvais user ID ou \n- vous n'êtes pas le propriétaire du bot. \nRappel: votre user ID est ${chatId}.`
     );
   }
 });

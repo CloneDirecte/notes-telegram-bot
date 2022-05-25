@@ -50,6 +50,9 @@ bot.start(async (ctx) => {
         const removeDupes = write.data.notes.filter(
           ({ devoir }) => !sortEdNotesReturn.has(devoir)
         );
+        removeDupes.sort((a, b) => {
+          return a.libelleMatiere.localeCompare(b.libelleMatiere);
+        });
         if (removeDupes.length === 0) {
           logMsg("Pas de nouvelles notes.");
         } else {

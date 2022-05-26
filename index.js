@@ -76,7 +76,7 @@ bot.start(async (ctx) => {
       }
     }
     await edNotesCall();
-    setInterval(await edNotesCall, timeCheck ? timeCheck : 1000 * 60 * 60);
+    setInterval(edNotesCall, timeCheck ? timeCheck : 1000 * 60 * 60);
   } else {
     ctx.reply(
       `🚫 Une erreur est survenue. \nSolutions: \n- Vous avez probablement entré le mauvais user ID ou \n- vous n'êtes pas le propriétaire du bot. \nRappel: votre user ID est ${chatId}.`

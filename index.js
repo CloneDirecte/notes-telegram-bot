@@ -57,9 +57,13 @@ bot.start(async (ctx) => {
           logMsg("Pas de nouvelles notes.");
         } else {
           removeDupes.map((item) => {
-            var message = `📝 Nouvelle note en ${item.libelleMatiere}: ${item.valeur}/${item.noteSur},\nCoefficient: ${item.coef},\nDevoir: "${item.devoir}"`;
-            ctx.reply(message);
-            logMsg(message);
+            if (item.valeur) {
+              var message = `📝 Nouvelle note en ${item.libelleMatiere}: ${item.valeur}/${item.noteSur},\nCoefficient: ${item.coef},\nDevoir: "${item.devoir}"`;
+              ctx.reply(message);
+              logMsg(message);
+            } else {
+              logMsg(`Valeur de notes pour ${item.devoir} est inexistante`);
+            }
           });
         }
         fs.writeFileSync("./edNotesReturn.json", JSON.stringify(write));
